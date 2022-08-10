@@ -55,12 +55,6 @@ export default function IntroStep_1({handleStepId}){
     const [guideOpen, setGuideOpen] = useState(false);
     const handleGuideOpen = () => setGuideOpen(true);
     const handleGuideClose = () => setGuideOpen(false);
-    const [unlock, setUnlock] = useState(true);
-    const [markedIssuesOpen, setMarkedIssuesOpen] = useState(false);
-    const handleMarkedIssuesOpen = () => setMarkedIssuesOpen(true);
-    const handleMarkedIssuesClose = () => setMarkedIssuesOpen(false);
-    const [reviewMode, setReviewMode] = useState(false);
-  
     return(
         <>
             <div></div>
@@ -74,13 +68,13 @@ export default function IntroStep_1({handleStepId}){
                     <Grid item xs={12}>
                         <Grid container >
                             <Grid item xs={1}>
-                                {reviewMode&&(<div 
+                                <div 
                                         className={`fixed bottom-0 flexd-bottom w-[30%] `}
                                 >
                                     <div className={`translate-y-2`}>
                                     <MyImage src="/images/bottomlogo.svg" className={`h-24 w-full`}/>
                                     </div>
-                                </div>)}
+                                </div>
                             </Grid>
                             <Grid item xs={5}>
                                 <div className="pt-24 w-11/12 px-7">
@@ -94,22 +88,15 @@ export default function IntroStep_1({handleStepId}){
 
                                             <Grid item lg={3}>
                                                 <div>
-                                                    <CustomImage
-                                                    src="/images/Icon1.svg"
-                                                    className="h-8 opacity-75"
-                                                    style={{backgroundColor: '#000000', }}
-                                                    />
-                                                
+                                                    <CustomImage src="/images/Icon1.svg" className="h-8 " />
                                                 </div>
                                             </Grid>
                                             <Grid item lg={3}>
                                                 <CustomImage src="/images/Icon2.svg" className="h-8 " />
                                             </Grid>
                                             <Grid item lg={3}>
-                                                <CustomImage src="/images/Icon3.svg" className="h-8 opacity-75" style={{backgroundColor: '#000000', }}/>
                                             </Grid>
                                             <Grid item lg={3}>
-                                                <CustomImage src="/images/Icon4.svg" className="h-8 opacity-75" style={{backgroundColor: '#000000', }}/>
                                             </Grid>
                                         </Grid>
                                         <Grid
@@ -117,13 +104,8 @@ export default function IntroStep_1({handleStepId}){
                                         lg={2}
                                         className="border-2 border-black flex justify-center"
                                         >
-                                            <button
-                                            
-                                            >
-                                            <CustomImage
-                                                src="/images/help.svg"
-                                                className="h-8"
-                                            />
+                                            <button >
+                                                <CustomImage src="/images/help.svg" className="h-8" />
                                             </button>
                                         </Grid>
                                     </Grid>
@@ -179,30 +161,7 @@ export default function IntroStep_1({handleStepId}){
                                     <div className="flex justify-center pt-4">
                                         <MyImage src="/images/contentImage1.svg" className="w-60 h-36"/>
                                     </div>
-                                    <div>
-                                        {!guideOpen && (
-                                            <>
-                                            <svg  className="absolute top-16 left-[33%]" class = "button"  expanded = "true" height = "100px" width = "100px" 
-                                                onClick={() => {
-                                                    console.log("help clicked");
-                                                    handleGuideOpen();
-                                                }}
-                                            >
-                                            <circle class = "innerCircle" cx = "50%" stroke = "#FF4040" stroke-width = "10%" cy = "50%" r = "25%" fill = "none"/>
-                                            </svg>
-                                            <MyImage src="/images/BossMedium.svg" className="absolute right-[15%] bottom-32 w-[310px] h-[395px]"/>
-                                            <MyImage src="/images/AlertPanel.svg" className="absolute right-[10%] bottom-5 w-[769px] h-[238px]  break-words p-8"
-                                            >
-                                                <span className=" text-3xl">This is your desk, and you’ll be able to use the 
-                                                computer after you get promoted. For now, please click the question mark to see your task. 
-                                                </span>
-                                            </MyImage>
-                                            </>
-                                        )}
-                                        {/* alert Info part */}
-                                        
-                                        {/* alert Info part end */}
-                                    </div>
+                                    
                                     <div className="pr-4">
                                         <div className="text-2xl text-black font-bold text-center pt-2 ">
                                             {contentData[0].title}
@@ -222,23 +181,7 @@ export default function IntroStep_1({handleStepId}){
                                 </div>
                             </Grid>
                             <Grid item xs={5}>
-                                {/* <div className=" justify-center pt-[30%] pl-[20%] p-20">
-                                    <MyImage
-                                        src="/images/unlock.svg"
-                                        className={`h-[178px] w-[146px] ml-[25%]  ${
-                                        unlock ? "" : "hidden"
-                                        }`}
-                                        onClick={() => {
-                                        setUnlock(false);
-                                        }}
-                                    ></MyImage>
-                                    <MyImage
-                                        src="/images/tobeunlocked.svg"
-                                        className={` h-[27px] w-[220px] mt-[10%] ml-[15%] ${
-                                        unlock ? "" : "hidden"
-                                        }`}
-                                    ></MyImage>
-                                </div> */}
+                                
                             </Grid>
                         </Grid>
                     </Grid>
@@ -262,7 +205,27 @@ export default function IntroStep_1({handleStepId}){
                     </Grid>
                 </Grid>
 
-             
+                <div>
+                    {!guideOpen && (
+                        <>
+                        <svg  className="absolute top-16 left-[33%] button" expanded = "true" height = "100px" width = "100px" 
+                            onClick={() => {
+                                console.log("help clicked");
+                                handleGuideOpen();
+                            }}
+                        >
+                        <circle className = "innerCircle" cx = "50%" stroke = "#FF4040" strokeWidth = "10%" cy = "50%" r = "25%" fill = "none"/>
+                        </svg>
+                        <MyImage src="/images/BossMedium.svg" className="absolute right-[15%] bottom-32 w-[310px] h-[395px]"/>
+                        <MyImage src="/images/AlertPanel.svg" className="absolute right-[10%] bottom-5 w-[769px] h-[238px]  break-words p-8"
+                        >
+                            <span className=" text-3xl">This is your desk, and you’ll be able to use the 
+                            computer after you get promoted. For now, please click the question mark to see your task. 
+                            </span>
+                        </MyImage>
+                        </>
+                    )}
+                </div>
                     
             </div>
           
