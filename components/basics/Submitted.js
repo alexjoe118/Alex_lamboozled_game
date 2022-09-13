@@ -15,6 +15,38 @@ import Modal from '@mui/material/Modal';
 import Router from "next/router";
 // import MyToolTip from "../base/MyToolTip";
 
+// const BorderLinearProgress = withStyles((theme) => {
+//     return {
+//       root: {
+//         width: 30,
+//         height: "100%",
+//       },
+//       colorPrimary: {
+//         backgroundColor: "rgba(0, 0, 0, 0.25);",
+//       },
+//       bar: {
+//         transform: ({ value }) => {
+//           return `translateY(${value}%) !important`;
+//         },
+//         backgroundColor: "#FC5757",
+//       },
+//     };
+//   })(LinearProgress);
+
+//   const useStyles = makeStyles({
+//     root: {
+//       flexGrow: 1,
+//       height: 638,
+//       gap: 10,
+//       display: "flex",
+//       position: "fixed",
+//     },
+//     stats: {
+//       display: "flex",
+//       alignItems: "center",
+//       flexDirection: "row",
+//     },
+//   });
   
 export default function Submitted(){
     // const classes = useStyles();
@@ -35,12 +67,14 @@ export default function Submitted(){
             <div className={`max-w-[1280px] max-h-[790px] w-full h-full fixed top-1/2 left-1/2 -translate-x-1/2 
                             -translate-y-1/2 bg-${reviewMode?("[url('/images/backgroundBasic.svg')]"):("[url('/images/feedback.svg')]")}`}
                 >
-             
-              
+                {/* <div className={`max-w-[1280px] max-h-[790px] w-full h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                            -translate-y-1/2 bg-[url('/images/feedback.svg')]`}
+                > */}
+                {/* background image mapping */}
                 {reviewMode?(<div className="absolute  h-[720px] top-0 left-0 bg-[length:700px_700px]  w-6/12 -z-10 object-cover bg-[url('/images/tabletlayout.svg')] bg-no-repeat" >
                 </div>):(<div className="absolute  bg-cover bg-no-repeat h-[850px] top-0 left-0 ml-20 -translate-y-16 w-6/12 -z-10 object-cover bg-[url('/images/tabletlayout.svg')]" >
                 </div>)}
-              
+                {/* background image mapping */}
                 <Grid container className="h-full">
                     <Grid item xs={12}>
                         <Grid container >
