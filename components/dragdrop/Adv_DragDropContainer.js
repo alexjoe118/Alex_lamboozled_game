@@ -1,7 +1,7 @@
 import update from "immutability-helper";
 import { useCallback, useState } from "react";
 import { useDrop } from "react-dnd";
-import { Box } from "./Box.js";
+import { Box_adv } from "./Box_adv";
 import Tooltip from "@mui/material/Tooltip";
 import { ItemTypes } from "./ItemTypes.js";
 import InfoModal from "../InfoModal";
@@ -16,34 +16,46 @@ import {
 const styles = {
   position: "relative",
 };
-export const DragDropContainer = ({
+export const Adv_DragDropContainer = ({
   children,
-  hideSourceOnDrag,
+  hidesourceondrag,
   stickers = [],
-  unlock,
-  isdraging = false,
+  onscreen = true,
 }) => {
   //alex added
   const markedStickers = useSelector(
-    (state) => state?.game?.markedStickers ?? "000000000000"
+    (state) => state?.game?.markedStickers ?? []
   );
   const dispatch = useDispatch();
   let stickersData = [];
   stickers.map((stickerId, index) => {
-    if (index < 4) {
+    if (
+      stickerId == 4 ||
+      stickerId == 5 ||
+      stickerId == 7 ||
+      stickerId == 9 ||
+      stickerId == 11
+    ) {
       stickersData.push({
-        top: 106,
-        left: 93 + index * 60,
+        top: 25,
+        left: 490,
+        stickerId: stickerId,
+      });
+    }
+    if (stickerId == 6 || stickerId == 8 || stickerId == 10) {
+      stickersData.push({
+        top: 25,
+        left: 430,
         stickerId: stickerId,
       });
     }
   });
   // console.log("stickerData--", stickersData);
-  // const [tipShowArr, setShowTipArr] = useState(
-  //   stickers.map((stickerId, index) => ({
-  //     stickerId: false,
-  //   }))
-  // );
+  const [tipShowArr, setShowTipArr] = useState(
+    stickers.map((stickerId, index) => ({
+      stickerId: false,
+    }))
+  );
 
   //alex ended
   const [boxes, setBoxes] = useState(stickersData);
@@ -61,28 +73,28 @@ export const DragDropContainer = ({
   );
   const [, drop] = useDrop(
     () => ({
-      accept: ItemTypes.BOX,
+      accept: ItemTypes.BOX_ADV,
       drop(item, monitor) {
         const delta = monitor.getDifferenceFromInitialOffset();
         const left = Math.round(item.left + delta.x);
         const top = Math.round(item.top + delta.y);
         // console.log(left, "x-y", top);
-        // if(item.id > 3) return undefined;
-        // console.log("item.id", item.id);
-        if (left > 330 && left < 380 && top > 100 && top < 120) {
+
+        // console.log("tempArr------------------", tempArr);
+        if (left > 550 && left < 600 && top > 0 && top < 50) {
           //validate question marking
+          // console.log("adv1");
           handleGuideOpen(boxes[item.id].stickerId);
           handleStickerId(boxes[item.id].stickerId);
           moveBox(item.id, item.left, item.top);
-          // console.log("normal1");
-        } else if (left > 0 && left < 425 && top > 150 && top < 506) {
+        } else if (left > 0 && left < 600 && top > 80 && top < 350) {
           //validate correct marking
-          // if (markedStickers.charAt(boxes[item.id].stickerId) == '0') {
+          if (markedStickers.indexOf(boxes[item.id].stickerId) < 0) {
             dispatch(appendMarkedStickers(boxes[item.id].stickerId));
-          // }
+          }
           moveBox(item.id, left, top);
         } else {
-          // console.log("normal2");
+          // console.log("adv2");
           moveBox(
             item.id,
             stickersData[item.id].left,
@@ -102,26 +114,26 @@ export const DragDropContainer = ({
   const handleGuideClose = () => setGuideOpen(false);
   const [stickerInfoId, setStickerInfoId] = useState(0);
   const handleStickerId = (value) => setStickerInfoId(value);
-
   // alex ended
   return (
     <>
-      <div ref={isdraging ? drop : undefined} style={styles}>
+      <div ref={drop} style={styles} className="w-full h-full">
         {children}
         {Object.keys(boxes).map((key) => {
           const { left, top, stickerId } = boxes[key];
           return (
-            <Box
+            <Box_adv
               key={key}
               id={key}
               left={left}
               top={top}
-              hideSourceOnDrag={hideSourceOnDrag}
+              hideSourceOnDrag={hidesourceondrag}
             >
-              <MyToolTip stickerId={stickerId} markedStickers={markedStickers} onscreen={true}>
-                {unlock ? ( //unlock
-                  <></>
-                ) : (
+                <MyToolTip
+                  stickerId={stickerId}
+                  markedStickers={markedStickers}
+                  onscreen={onscreen}
+                >
                   <MyImage
                     src={`/images/Icon${stickerId + 1}.svg`}
                     className="h-8 w-8"
@@ -130,19 +142,17 @@ export const DragDropContainer = ({
                     //   handleGuideOpen();
                     // }}
                   />
-                )}
-              </MyToolTip>
-            </Box>
+                </MyToolTip>
+            </Box_adv>
           );
         })}
-        {isdraging && (
-          <InfoModal
-            guideOpen={guideOpen}
-            stickerId={stickerInfoId}
-            handleGuideClose={handleGuideClose}
-            
-          />
-        )}
+        {/* {handlemarkedstickers && ( */}
+        <InfoModal
+          guideOpen={guideOpen}
+          stickerId={stickerInfoId}
+          handleGuideClose={handleGuideClose}
+        />
+        {/* )} */}
       </div>
     </>
   );
