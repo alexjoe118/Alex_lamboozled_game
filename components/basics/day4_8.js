@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 // UserApis
 import CustomImage from "../base/CustomImage";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import MyImage from "../base/MyImage";
 import content from "../../public/assets/articles.json";
 import { DndProvider } from "react-dnd";
@@ -23,10 +24,7 @@ import Reverse from "../base/Reverse";
 import Lateral from "../base/Lateral";
 
 import { useSelector, useDispatch } from "react-redux";
-import {
-  updateMeterByAmount,
-
-} from "../../store/reducers/gameSlice";
+import { updateMeterByAmount } from "../../store/reducers/gameSlice";
 export default function Day4_8({
   curArtId = 0,
   curArtIndex = 0,
@@ -34,11 +32,13 @@ export default function Day4_8({
   handleIsFeed,
   unlockedStickers,
   advancedData,
+  curDay,
 }) {
   // game logic
   const markedStickers = useSelector(
     (state) => state?.game?.markedStickers ?? []
   );
+  const userName = useSelector((state) => state?.game?.userName ?? "Unkown");
   const meter = useSelector((state) => state?.game?.meter ?? 50);
   const dispatch = useDispatch();
 
@@ -80,42 +80,52 @@ export default function Day4_8({
     correct.map((stickerId) => {
       sum += weights[stickerId];
     });
-    
+
     wrong.map((stickerId) => {
       sum -= weights[stickerId];
     });
-    console.log("sum", sum, "wrong", wrong,"correct", correct, "markedsticker", markedStickers, "answer_key", answer_key);
-    dispatch(updateMeterByAmount(sum));  
+    console.log(
+      "sum",
+      sum,
+      "wrong",
+      wrong,
+      "correct",
+      correct,
+      "markedsticker",
+      markedStickers,
+      "answer_key",
+      answer_key
+    );
+    dispatch(updateMeterByAmount(sum));
   };
 
   return (
     <>
-      <div
-        className="max-w-[1280px] max-h-[720px] w-full h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+       <div
+        className="max-w-[1280px] max-h-[720px] bg-cover bg-no-repeat w-full h-full fixed top-1/2 left-1/2 -translate-x-1/2 
                             -translate-y-1/2 bg-[url('/images/backgroundBasic.svg')]"
       >
-        <div className="absolute  h-[720px] top-0 left-0 bg-[length:700px_700px]  w-6/12 -z-10 object-cover bg-[url('/images/tabletlayout.svg')] ,bg-no-repeat"></div>
+        <div className="absolute  h-[740px] top-0 -left-10 bg-[length:700px_720px]  w-6/12 -z-10 bg-[url('/images/tabletlayout.svg')] bg-no-repeat"></div>
         <DndProvider backend={HTML5Backend}>
           <Grid container className="h-full">
             <Grid item xs={12}>
               <Grid container>
-                <Grid item xs={1}>
+                {/* <Grid item xs={1}>
                   <div className="h-full">
                     <div className="w-full  bg-no-repeat bg-fill">
                       <MyTimer />
                     </div>
                   </div>
-                </Grid>
+                </Grid> */}
 
                 <Grid item xs={5}>
                   <DragDropContainer
                     hideSourceOnDrag={true}
                     stickers={unlockedStickers}
-                    //
                     unlock={false}
                     isdraging={true}
                   >
-                    <div className="pt-24 w-11/12 px-7">
+                    <div className="pt-24 w-10/12 pl-6 translate-x-20">
                       <Grid container columns={10} className="pl-10">
                         <Grid
                           item
@@ -128,9 +138,11 @@ export default function Day4_8({
                           lg={2}
                           className="border-2 border-black flex justify-center"
                         >
-                          <button onClick={() => {
+                          <button
+                            onClick={() => {
                               handleGuideOpen();
-                            }}>
+                            }}
+                          >
                             <CustomImage
                               src="/images/help.svg"
                               className="h-8"
@@ -165,102 +177,67 @@ export default function Day4_8({
                   </DragDropContainer>
                 </Grid>
                 <Grid item xs={5}>
-                  <div className="w-[626px] h-[377px] bg-white justify-center mt-[101px] ml-[-26px] ">
-                    {curArtIndex == 0 && unlock == true ? ( //
-                      <div>
-                        <MyImage
-                          src="/images/SearchBar.svg"
-                          className="w-[520px] h-[35px] ml-[53px] mt-[40px] float-left justify-between"
-                          onClick={() => {
-                            setUnlock(false);
-                          }}
-                        >
-                          <span className="ml-[20px] mt-[5px] float-left text-[#4F4F4F] ">
-                            Click the bar to begin your search
-                          </span>
-                          <MyImage
-                            src="/images/SearchIcon.svg"
-                            className="float-right w-[29px] h-[27px] mr-[9px] mt-[3px]"
-                          />
-                        </MyImage>
-                        <MyImage
-                          src="/images/BossFace1.svg"
-                          className="float-left w-[230px] h-[137px] ml-[200px] mt-[40px]"
-                        />
-                        <span className="w-[400px] float-left ml-[125px] mt-[20px]">
-                          “I put my handsome face here to give you support. I
-                          believe you can figure out how to use the computer by
-                          yourself.”
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="w-full h-full">
-                        {/* <Adv_DragDropContainer
-                          hideSourceOnDrag={true}
-                          stickers={unlockedStickers}
-                          handleMarkedStickers={handleMarkedStickers}
-                          unlock={false}
-                          sceneIndex={sceneIndex}
-                        > */}
-                        <Categories
-                          className={`${
-                            sceneIndex === 0 ? "show" : "hidden"
-                          } w-full h-full`}
-                          handleScene={handleScene}
-                        />
-                        <Social
-                          className={`${
-                            sceneIndex === 1 ? "show" : "hidden"
-                          } w-full h-full`}
-                          handleSceneP={handleSceneP}
-                          hidesourceondrag={true} //dnd props
-                          stickers={[4]}
-                          onscreen={sceneIndex === 1 ? true : false}
-                          socialData={advancedData.socialData}
-                        />
-                        <Source
-                          className={`${
-                            sceneIndex === 2 ? "show" : "hidden"
-                          } w-full h-full`}
-                          handleSceneP={handleSceneP}
-                          hidesourceondrag={true} //dnd props
-                          stickers={[5, 6]}
-                          onscreen={sceneIndex === 2 ? true : false}
-                          sourceData={advancedData.sourceData}
-                        />
-                        <Fact
-                          className={`${
-                            sceneIndex === 3 ? "show" : "hidden"
-                          } w-full h-full`}
-                          handleSceneP={handleSceneP}
-                          hidesourceondrag={true} //dnd props
-                          stickers={[7, 8]}
-                          onscreen={sceneIndex === 3 ? true : false}
-                          // art_answer={article.answer_key}
-                        />
-                        <Reverse
-                          className={`${
-                            sceneIndex === 4 ? "show" : "hidden"
-                          } w-full h-full`}
-                          handleSceneP={handleSceneP}
-                          hidesourceondrag={true} //dnd props
-                          stickers={[9, 10]}
-                          onscreen={sceneIndex === 4 ? true : false}
-                          curArtId={curArtId}
-                        />
-                        <Lateral
-                          className={`${
-                            sceneIndex === 5 ? "show" : "hidden"
-                          } w-full h-full`}
-                          handleSceneP={handleSceneP}
-                          hidesourceondrag={true} //dnd props
-                          stickers={[11]}
-                          onscreen={sceneIndex === 5 ? true : false}
-                          lateralData={advancedData.lateralData}
-                        />
-                        {/* </Adv_DragDropContainer> */}
-                      </div>
-                    )}
+                  <div className="w-[650px] h-[377px] bg-white justify-center mt-[101px] ml-[11%] ">
+                  {/* <div className=" justify-center pt-[30%] pl-[20%] p-20"> */}
+
+                    <div className="w-full h-full">
+                      <Categories
+                        className={`${
+                          sceneIndex === 0 ? "show" : "hidden"
+                        } w-full h-full`}
+                        handleScene={handleScene}
+                      />
+                      <Social
+                        className={`${
+                          sceneIndex === 1 ? "show" : "hidden"
+                        } w-full h-full`}
+                        handleSceneP={handleSceneP}
+                        hidesourceondrag={true} //dnd props
+                        stickers={[4]}
+                        onscreen={sceneIndex === 1 ? true : false}
+                        socialData={advancedData.socialData}
+                      />
+                      <Source
+                        className={`${
+                          sceneIndex === 2 ? "show" : "hidden"
+                        } w-full h-full`}
+                        handleSceneP={handleSceneP}
+                        hidesourceondrag={true} //dnd props
+                        stickers={[5, 6]}
+                        onscreen={sceneIndex === 2 ? true : false}
+                        sourceData={advancedData.sourceData}
+                      />
+                      <Fact
+                        className={`${
+                          sceneIndex === 3 ? "show" : "hidden"
+                        } w-full h-full`}
+                        handleSceneP={handleSceneP}
+                        hidesourceondrag={true} //dnd props
+                        stickers={[7, 8]}
+                        onscreen={sceneIndex === 3 ? true : false}
+                        // art_answer={article.answer_key}
+                      />
+                      <Reverse
+                        className={`${
+                          sceneIndex === 4 ? "show" : "hidden"
+                        } w-full h-full`}
+                        handleSceneP={handleSceneP}
+                        hidesourceondrag={true} //dnd props
+                        stickers={[9, 10]}
+                        onscreen={sceneIndex === 4 ? true : false}
+                        curArtId={curArtId}
+                      />
+                      <Lateral
+                        className={`${
+                          sceneIndex === 5 ? "show" : "hidden"
+                        } w-full h-full`}
+                        handleSceneP={handleSceneP}
+                        hidesourceondrag={true} //dnd props
+                        stickers={[11]}
+                        onscreen={sceneIndex === 5 ? true : false}
+                        lateralData={advancedData.lateralData}
+                      />
+                    </div>
                   </div>
                 </Grid>
               </Grid>
@@ -268,13 +245,28 @@ export default function Day4_8({
             <Grid item xs={12}>
               <Grid container className="h-full">
                 <Grid item xs={4}>
-                  <div className={`fixed bottom-0 flexd-bottom w-[30%] `}>
-                    <div className={`translate-y-2`}>
+                  <div className="fixed bottom-0 fixed-bottom w-[30%] h-24 bg-black -ml-[30%]"></div>
+                  <div
+                    className={`meter-bar fixed bottom-0 flexd-bottom w-[30%] `}
+                  >
+                    <MyImage
+                      src="/images/bottomlogo.svg"
+                      className={`h-24 w-full`}
+                    >
                       <MyImage
-                        src="/images/bottomlogo.svg"
-                        className={`h-24 w-full`}
-                      />
-                    </div>
+                        src="/images/Calendar.svg"
+                        className={`h-16 w-16 translate-y-5 ml-5`}
+                      ></MyImage>
+
+                      <MyImage
+                        src="/images/MeterTitle.svg"
+                        className={`h-12 w-48 -translate-y-7 ml-28`}
+                      ></MyImage>
+                      <Meter point={meter} />
+                      <div className="-translate-y-[75px] absolute right-10">
+                        <ArrowForwardIosOutlinedIcon className="fixed meter-bar-arrow" />
+                      </div>
+                    </MyImage>
                   </div>
                 </Grid>
                 <Grid item xs={4}>
@@ -284,10 +276,11 @@ export default function Day4_8({
                         className="Alex_btn_gra_1 translate-x-6 h-2/4 w-3/4 bg-red-300 flex flex-row items-center justify-center rounded-md cursor-pointer"
                         onClick={() => {
                           handleMarkedIssuesOpen();
-                          //console.log(markedIssuesOpen);
                         }}
                       >
-                        <label className="cursor-pointer">{(markedStickers.match(/1/g) || []).length} issue(s)</label>
+                        <label className="cursor-pointer">
+                          {(markedStickers.match(/1/g) || []).length} issue(s)
+                        </label>
                         <MyImage
                           src="/images/eye.svg"
                           className="h-8 px-2 w-8"
@@ -297,9 +290,7 @@ export default function Day4_8({
                       <button
                         className="bg-black rounded-3xl px-14 py-2 text-white font-bold text-2xl"
                         onClick={() => {
-                          // setCounter(100);
                           handleIsFeed(true);
-                          //Router.push("/feedback");
                           calcResult();
                         }}
                       >
@@ -310,16 +301,15 @@ export default function Day4_8({
                 </Grid>
 
                 <Grid item xs={4}>
-                  <div className={`fixed bottom-0 flexd-bottom w-[30%] `}>
+                  {/* <div className={`fixed bottom-0 flexd-bottom w-[30%] `}>
                     <div className="translate-y-2 translate-x-11">
                       <MyImage
                         src="/images/bottomlambmeter.svg"
                         className="h-24"
                       />
-
                       <Meter point={meter} />
                     </div>
-                  </div>
+                  </div> */}
                 </Grid>
               </Grid>
             </Grid>
@@ -370,13 +360,13 @@ export default function Day4_8({
               </div>
             </div>
           </Modal>
-          <IssueModal
-            open={markedIssuesOpen}
-            IssuClose={handleMarkedIssuesClose}
-            markedStickers={markedStickers}
-            setIsFeedback={handleIsFeed}
-          />
         </DndProvider>
+        <IssueModal
+          open={markedIssuesOpen}
+          IssuClose={handleMarkedIssuesClose}
+          markedStickers={markedStickers}
+          setIsFeedback={handleIsFeed}
+        />
       </div>
     </>
   );
