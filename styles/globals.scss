@@ -124,9 +124,10 @@
     
   }
   .meter-bar {
-    margin-left: -26.5%;
+    margin-left: -27%;
     transition: margin-left 0.2s;
     transition-timing-function: linear;
+    cursor: pointer;
   }
   .meter-bar:hover {
     margin-left: 0%;
@@ -135,4 +136,44 @@
     }
   }
 
-  
+
+  /* Wallet SideBar */
+.sidebar{
+    position: fixed;
+    z-index: 1600;
+    transition: 2s;
+}
+.sidebar.active{
+    bottom: 0;
+}
+.sidebar-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    transition: 0.5s;
+    opacity: 0;
+    visibility: hidden;
+}
+.sidebar-overlay.active{
+    opacity: 1;
+    visibility: visible;
+}
+//blackbutton animation]
+.next-btn {
+  width: 80px;
+  height: 79px;
+  animation-name: next-btn;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+@keyframes next-btn {
+  0% {width: 80px;
+    height: 79px;}
+  50% {width: 85px;
+    height: 83px;}
+  100% {width: 80px;
+    height: 79px;}
+}

@@ -5,7 +5,7 @@ import FeedBack from "../basics/FeedBack";
 import sources from "../../public/assets/sources.json";
 import content from "../../public/assets/articles.json";
 
-export default function StoryDay7({ meter = 50, handleMeter, handleTheDay }) {
+export default function StoryDay8({ meter = 50, handleMeter, handleTheDay }) {
   const [cntArt, setcntArt] = useState(3);
   const articlesId = [19, 20, 21];
   const [curArtIndex, setCurArtIndex] = useState(0);
@@ -75,7 +75,7 @@ export default function StoryDay7({ meter = 50, handleMeter, handleTheDay }) {
             unlockedStickers={[0, 1, 2, 3]}
             advancedData={advancedData}
             curDay = {8}
-          />
+            />
         </div>
       ) : (
         <div>
@@ -85,6 +85,7 @@ export default function StoryDay7({ meter = 50, handleMeter, handleTheDay }) {
             leftArts={articlesId.length - Number(curArtIndex) - 1}
             handleIsFeed={handleIsFeed}
             handleCurArtIndex={handleCurArtIndex}
+            curDay = {8}
           />
         </div>
       )}

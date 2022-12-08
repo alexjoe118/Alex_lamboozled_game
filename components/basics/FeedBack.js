@@ -5,6 +5,8 @@ import MyImage from "../base/MyImage";
 import stickers from "../../public/assets/sticker.json";
 // FOR IMPORTING ARITCLE DATA
 import content from "../../public/assets/articles.json";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
@@ -14,6 +16,8 @@ import Meter from "../base/Meter";
 import Modal from "@mui/material/Modal";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import Typed from "react-typed";
+
 // MODULES FOR DRAG&DROP
 import Router from "next/router";
 import { useSelector, useDispatch } from "react-redux";
@@ -34,6 +38,7 @@ export default function FeedBack({
   handleIsFeed,
   handleCurArtIndex,
   curArtId,
+  curDay,
 }) {
   const dispatch = useDispatch();
 
@@ -50,6 +55,7 @@ export default function FeedBack({
   const markedStickers = useSelector(
     (state) => state?.game?.markedStickers ?? "000000000000"
   );
+  console.log("markedStickers==", markedStickers);
   const weights = [1, 1, 2, 1, 1, 2, 2, 2, 2, 3, 3, 3];
   const article = content[curArtIndex];
   const answer_key = article.answer_key;
@@ -67,11 +73,22 @@ export default function FeedBack({
     sum += weights[stickerId];
   });
   const correctCnt = (article.answer_key.match(/1/g) || []).length;
-  
+
   wrong.map((stickerId) => {
     sum -= weights[stickerId];
   });
-    console.log("sum", sum, "wrong", wrong,"correct", correct, "markedsticker", markedStickers, "answer_key", answer_key);
+  console.log(
+    "sum",
+    sum,
+    "wrong",
+    wrong,
+    "correct",
+    correct,
+    "markedsticker",
+    markedStickers,
+    "answer_key",
+    answer_key
+  );
 
   let sumcolor = "#0DA71C";
   if (sum > 0) {
@@ -96,7 +113,7 @@ export default function FeedBack({
   return (
     <>
       <div
-        className={`max-w-[1280px] max-h-[790px] w-full h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+        className={`max-w-[1280px] max-h-[712px] w-full h-full fixed top-1/2 left-1/2 -translate-x-1/2 
                             -translate-y-1/2 bg-${
                               reviewMode
                                 ? "[url('/images/backgroundBasic.svg')]"
@@ -113,14 +130,38 @@ export default function FeedBack({
             <Grid container>
               <Grid item xs={1}>
                 {reviewMode && (
-                  <div className={`fixed bottom-0 flexd-bottom w-[30%] `}>
-                    <div className={`translate-y-2`}>
+                  <>
+                    <div className="fixed bottom-0 fixed-bottom w-[30%] h-24 bg-black -ml-[30%]"></div>
+                    <div
+                      className={`meter-bar fixed bottom-0 flexd-bottom w-[30%] `}
+                    >
                       <MyImage
                         src="/images/bottomlogo.svg"
                         className={`h-24 w-full`}
-                      />
+                      >
+                        <MyImage
+                          src="/images/Calendar.svg"
+                          className={`h-16 w-16 translate-y-5 ml-5 flex justify-center`}
+                        >
+                          <span
+                            className="text-[22px] font-bold mt-[22px]"
+                            style={{ fontFamily: "Patrick Hand" }}
+                          >
+                            {curDay}
+                          </span>
+                        </MyImage>
+
+                        <MyImage
+                          src="/images/MeterTitle.svg"
+                          className={`h-12 w-48 -translate-y-7 ml-28`}
+                        ></MyImage>
+                        <Meter point={meter} />
+                        <div className="-translate-y-[75px] absolute right-10">
+                          <ArrowForwardIosOutlinedIcon className="fixed meter-bar-arrow" />
+                        </div>
+                      </MyImage>
                     </div>
-                  </div>
+                  </>
                 )}
               </Grid>
               <Grid item xs={5}>
@@ -182,10 +223,10 @@ export default function FeedBack({
                         className="w-60 h-36"
                       />
                     </div>
-                    {/* <div className="z-[1502] ">
+                    <div className="z-[1502] ">
                       {reviewSticker < 4 && (
                         <svg
-                          className="absolute top-16 button"
+                          className="absolute top-20 button"
                           style={{
                             marginLeft: `${reviewSticker * 55 + 35}` + "px",
                           }}
@@ -214,7 +255,7 @@ export default function FeedBack({
                         reviewSticker == 9 ||
                         reviewSticker == 11) && (
                         <svg
-                          className="absolute top-16 button"
+                          className="absolute top-20 button z-[9999999]"
                           style={{
                             marginLeft: `${1000 - 1 * 55}` + "px",
                           }}
@@ -241,7 +282,7 @@ export default function FeedBack({
                         reviewSticker == 8 ||
                         reviewSticker == 10) && (
                         <svg
-                          className="absolute top-16 button"
+                          className="absolute top-16 button z-[9999999]"
                           style={{
                             marginLeft: `${1000 - 2 * 55}` + "px",
                           }}
@@ -272,23 +313,7 @@ export default function FeedBack({
                             : "scale-x-[-1] right-[30%]"
                         }`}
                       />
-
-                      <MyImage
-                        src="/images/AlertPanel.svg"
-                        className="absolute right-[10%] top-48 w-[769px] h-[238px]  break-words p-8"
-                      >
-                        <span className=" text-3xl">
-                          {stickers[reviewSticker].description}
-                        </span>
-                      </MyImage>
-                      <MyImage
-                        src="/images/ArrowYellow.svg"
-                        className="cursor-pointer absolute right-[5.5%] top-[54%]  w-[80px] h-[79px]"
-                        onClick={() => {
-                          setReviewMode(false);
-                        }}
-                      />
-                    </div> */}
+                    </div>
 
                     <div className="pr-4">
                       <div className="text-2xl text-black font-bold text-center pt-2 ">
@@ -361,7 +386,7 @@ export default function FeedBack({
                                   <button
                                     className="bg-[#FC5757]  px-1 py-0  text-white "
                                     onClick={() => {
-                                      dispatch(initMarkedStickers());
+                                      // dispatch(initMarkedStickers());
                                       setReviewSticker(stickerId);
                                       setReviewMode(true);
                                     }}
@@ -389,9 +414,8 @@ export default function FeedBack({
                           <button
                             className="bg-black rounded-3xl px-14 py-2 text-white font-bold text-2xl"
                             onClick={() => {
-                              // setReviewMode(true);
-                              dispatch(nextDay());
-                              // dispatch(updateMeterByAmount(sum));
+                              // dispatch(nextDay());
+                              dispatch(updatePlayStatus("endofday"));
                               dispatch(initMarkedStickers());
                             }}
                           >
@@ -405,9 +429,9 @@ export default function FeedBack({
                               handleCurArtIndex();
                               // dispatch(updateMeterByAmount(sum));
                               dispatch(initMarkedStickers());
-                              if (theDay == 8) {
-                                dispatch(updatePlayStatus("landing"));
-                              }
+                              // if (theDay == 9) {
+                              //   dispatch(updatePlayStatus("landing"));
+                              // }
                             }}
                           >
                             NEXT
@@ -451,6 +475,7 @@ export default function FeedBack({
                             stickers={[4]}
                             unlock={false}
                             socialData={advancedData.socialData}
+                            reviewMode = {reviewMode}
                           />
                         )}
                         {(reviewSticker === 5 || reviewSticker === 6) && (
@@ -461,6 +486,7 @@ export default function FeedBack({
                             stickers={[5, 6]}
                             unlock={false}
                             sourceData={advancedData.sourceData}
+                            reviewMode = {reviewMode}
                           />
                         )}
                         {(reviewSticker === 7 || reviewSticker === 8) && (
@@ -470,7 +496,7 @@ export default function FeedBack({
                             hidesourceondrag={false} //dnd props
                             stickers={[7, 8]}
                             unlock={false}
-                            // art_answer={article.answer_key}
+                            reviewMode = {reviewMode}
                           />
                         )}
                         {(reviewSticker === 9 || reviewSticker === 10) && (
@@ -481,6 +507,7 @@ export default function FeedBack({
                             stickers={[9, 10]}
                             unlock={false}
                             curArtId={curArtId}
+                            reviewMode = {reviewMode}
                           />
                         )}
                         {reviewSticker === 11 && (
@@ -491,6 +518,7 @@ export default function FeedBack({
                             stickers={[11]}
                             unlock={false}
                             lateralData={advancedData.lateralData}
+                            reviewMode = {reviewMode}
                           />
                         )}
                       </div>
@@ -502,31 +530,20 @@ export default function FeedBack({
           </Grid>
           <Grid item xs={12}>
             <Grid container className="h-full">
-              <Grid item xs={4}>
-                {reviewMode ? (
-                  <div className={`fixed bottom-0 flexd-bottom w-[30%] `}>
-                    <div className={`translate-y-2`}>
-                      <MyImage
-                        src="/images/bottomlogo.svg"
-                        className={`h-24 w-full`}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </Grid>
               <Grid item xs={4}></Grid>
-
+              <Grid item xs={4}></Grid>
               <Grid item xs={4}>
                 {!reviewMode && (
                   <div className={` fixed bottom-0 flexd-bottom w-[30%] `}>
-                    <div className="translate-y-2 translate-x-11">
+                    <div className="translate-x-11">
                       <MyImage
                         src="/images/bottomlambmeter.svg"
                         className="h-24"
                       />
-                      <Meter point={meter} />
+                      <div className="bg-white w-80 h-10 absolute -mt-20 ml-12"></div>
+                      <div className="mt-1 -ml-4">
+                        <Meter point={meter} />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -535,147 +552,195 @@ export default function FeedBack({
           </Grid>
         </Grid>
         {reviewMode && (
-        <div className="z-[1502] ">
-          {reviewSticker < 4 && (
-            <svg
-              className="absolute top-16 button"
-              style={{
-                marginLeft: `${reviewSticker * 55 + 170}` + "px",
-              }}
-              expanded="true"
-              height="100px"
-              width="100px"
-              onClick={() => {
-                // console.log("help clicked");
-                handleGuideOpen();
-              }}
-            >
-              <circle
-                className="innerCircle"
-                cx="50%"
-                stroke="#FF4040"
-                strokeWidth="10%"
-                cy="50%"
-                r="25%"
-                fill="none"
-              />
-            </svg>
-          )}
-          {(reviewSticker == 4 ||
-            reviewSticker == 5 ||
-            reviewSticker == 7 ||
-            reviewSticker == 9 ||
-            reviewSticker == 11) && (
-            <svg
-              className="absolute top-16 button"
-              style={{
-                marginLeft: `${1125 - 1 * 55}` + "px",
-                marginTop: "25px",
-              }}
-              expanded="true"
-              height="100px"
-              width="100px"
-              onClick={() => {
-                // console.log("help clicked");
-                handleGuideOpen();
-              }}
-            >
-              <circle
-                className="innerCircle"
-                cx="50%"
-                stroke="#FF4040"
-                strokeWidth="10%"
-                cy="50%"
-                r="25%"
-                fill="none"
-              />
-            </svg>
-          )}
-          {(reviewSticker == 6 ||
-            reviewSticker == 8 ||
-            reviewSticker == 10) && (
-            <svg
-              className="absolute top-16 button"
-              style={{
-                marginLeft: `${1120 - 2 * 55}` + "px",
-                marginTop: "25px",
-              }}
-              expanded="true"
-              height="100px"
-              width="100px"
-              onClick={() => {
-                // console.log("help clicked");
-                handleGuideOpen();
-              }}
-            >
-              <circle
-                className="innerCircle"
-                cx="50%"
-                stroke="#FF4040"
-                strokeWidth="10%"
-                cy="50%"
-                r="25%"
-                fill="none"
-              />
-            </svg>
-          )}
-          {reviewSticker < 4 ? (
-            <>
-              <MyImage
-                src="/images/BossSmall.svg"
-                className={`absolute right-[55%] top-10 w-[134px] h-[170px] ${
-                  reviewSticker < 4 ? "right-[55%]" : "scale-x-[-1] right-[30%]"
-                }`}
-              />
+          // <div className="z-[1502] ">
+          //   {reviewSticker < 4 && (
+          //     <svg
+          //       className="absolute top-16 button"
+          //       style={{
+          //         marginLeft: `${reviewSticker * 55 + 170}` + "px",
+          //       }}
+          //       expanded="true"
+          //       height="100px"
+          //       width="100px"
+          //       onClick={() => {
+          //         // console.log("help clicked");
+          //         handleGuideOpen();
+          //       }}
+          //     >
+          //       <circle
+          //         className="innerCircle"
+          //         cx="50%"
+          //         stroke="#FF4040"
+          //         strokeWidth="10%"
+          //         cy="50%"
+          //         r="25%"
+          //         fill="none"
+          //       />
+          //     </svg>
+          //   )}
+          //   {(reviewSticker == 4 ||
+          //     reviewSticker == 5 ||
+          //     reviewSticker == 7 ||
+          //     reviewSticker == 9 ||
+          //     reviewSticker == 11) && (
+          //     <svg
+          //       className="absolute top-16 button"
+          //       style={{
+          //         marginLeft: `${1125 - 1 * 55}` + "px",
+          //         marginTop: "25px",
+          //       }}
+          //       expanded="true"
+          //       height="100px"
+          //       width="100px"
+          //       onClick={() => {
+          //         // console.log("help clicked");
+          //         handleGuideOpen();
+          //       }}
+          //     >
+          //       <circle
+          //         className="innerCircle"
+          //         cx="50%"
+          //         stroke="#FF4040"
+          //         strokeWidth="10%"
+          //         cy="50%"
+          //         r="25%"
+          //         fill="none"
+          //       />
+          //     </svg>
+          //   )}
+          //   {(reviewSticker == 6 ||
+          //     reviewSticker == 8 ||
+          //     reviewSticker == 10) && (
+          //     <svg
+          //       className="absolute top-16 button"
+          //       style={{
+          //         marginLeft: `${1120 - 2 * 55}` + "px",
+          //         marginTop: "25px",
+          //       }}
+          //       expanded="true"
+          //       height="100px"
+          //       width="100px"
+          //       onClick={() => {
+          //         // console.log("help clicked");
+          //         handleGuideOpen();
+          //       }}
+          //     >
+          //       <circle
+          //         className="innerCircle"
+          //         cx="50%"
+          //         stroke="#FF4040"
+          //         strokeWidth="10%"
+          //         cy="50%"
+          //         r="25%"
+          //         fill="none"
+          //       />
+          //     </svg>
+          //   )}
+          //   {reviewSticker < 4 ? (
+          //     <>
+          //       <MyImage
+          //         src="/images/BossSmall.svg"
+          //         className={`absolute right-[55%] top-10 w-[134px] h-[170px] ${
+          //           reviewSticker < 4
+          //             ? "right-[55%]"
+          //             : "scale-x-[-1] right-[30%]"
+          //         }`}
+          //       />
 
+          //       <MyImage
+          //         src="/images/AlertPanel.svg"
+          //         className="absolute right-[10%] top-48 w-[769px]   break-words p-8"
+          //       >
+          //         <span className=" text-3xl">
+          //           {stickers[reviewSticker].description}
+          //         </span>
+          //         <MyImage
+          //           src="/images/ArrowYellow.svg"
+          //           className="cursor-pointer absolute ml-[93%] mt-[-5%]  w-[80px] h-[79px]"
+          //           onClick={() => {
+          //             setReviewMode(false);
+          //           }}
+          //         />
+          //       </MyImage>
+          //     </>
+          //   ) : (
+          //     <>
+          //       <MyImage
+          //         src="/images/BossSmall.svg"
+          //         className={`absolute left-[50%] top-10 w-[134px] h-[170px] ${
+          //           reviewSticker < 4
+          //             ? "right-[55%]"
+          //             : "scale-x-[-1] right-[30%]"
+          //         }`}
+          //       />
+
+          //       <MyImage
+          //         src="/images/AlertPanel.svg"
+          //         className="absolute left-[3%] top-48 w-[769px]   break-words p-8"
+          //       >
+          //         <span className=" text-3xl">
+          //           {stickers[reviewSticker].description}
+          //         </span>
+          //         <MyImage
+          //           src="/images/ArrowYellow.svg"
+          //           className="cursor-pointer absolute mt-[-5%] ml-[93%] w-[80px] h-[79px]"
+          //           onClick={() => {
+          //             setReviewMode(false);
+          //           }}
+          //         />
+          //       </MyImage>
+          //     </>
+          //   )}
+          // </div>
+          <>
+            <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4 flex justify-center">
+              <img
+                src="/images/BossFace1.svg"
+                className="w-[239px] h-[137px] mt-10 ml-6"
+              />
+              <div className="text-[34px] w-7/12 break-words  pt-12 ml-4 leading-10">
+                <Typed
+                  strings={[stickers[reviewSticker].description]}
+                  typeSpeed={35}
+                  className="cursor-none"
+                />
+              </div>
               <MyImage
-                src="/images/AlertPanel.svg"
-                className="absolute right-[10%] top-48 w-[769px]   break-words p-8"
-              >
-                <span className=" text-3xl">
-                  {stickers[reviewSticker].description}
-                </span>
-                <MyImage
-                src="/images/ArrowYellow.svg"
-                className="cursor-pointer absolute ml-[93%] mt-[-5%]  w-[80px] h-[79px]"
+                src="/images/ArrowBlack.svg"
+                className="cursor-pointer absolute bottom-4 right-10  next-btn"
                 onClick={() => {
                   setReviewMode(false);
                 }}
               />
-              </MyImage>
-              
-            </>
-          ) : (
-            <>
-              <MyImage
-                src="/images/BossSmall.svg"
-                className={`absolute left-[50%] top-10 w-[134px] h-[170px] ${
-                  reviewSticker < 4 ? "right-[55%]" : "scale-x-[-1] right-[30%]"
-                }`}
-              />
-
-              <MyImage
-                src="/images/AlertPanel.svg"
-                className="absolute left-[3%] top-48 w-[769px]   break-words p-8"
-              >
-                <span className=" text-3xl">
-                  {stickers[reviewSticker].description}
-                </span>
+            </div>
+            <div className="fixed bottom-0 fixed-bottom w-[30%] h-24 bg-black -ml-[30%]"></div>
+            <div className={`meter-bar fixed bottom-0 flexd-bottom w-[30%] `}>
+              <MyImage src="/images/bottomlogo.svg" className={`h-24 w-full`}>
                 <MyImage
-                src="/images/ArrowYellow.svg"
-                className="cursor-pointer absolute mt-[-5%] ml-[93%] w-[80px] h-[79px]"
-                onClick={() => {
-                  setReviewMode(false);
-                }}
-              />
+                  src="/images/Calendar.svg"
+                  className={`h-16 w-16 translate-y-5 ml-5 flex justify-center`}
+                >
+                  <span
+                    className="text-[22px] font-bold mt-[22px]"
+                    style={{ fontFamily: "Patrick Hand" }}
+                  >
+                    {curDay}
+                  </span>
+                </MyImage>
+
+                <MyImage
+                  src="/images/MeterTitle.svg"
+                  className={`h-12 w-48 -translate-y-7 ml-28`}
+                ></MyImage>
+                <Meter point={meter} />
+                <div className="-translate-y-[75px] absolute right-10">
+                  <ArrowForwardIosOutlinedIcon className="fixed meter-bar-arrow" />
+                </div>
               </MyImage>
-              
-            </>
-          )}
-        </div>
-      )}
+            </div>
+          </>
+        )}
       </div>
-      
     </>
   );
 }

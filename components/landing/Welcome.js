@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Container } from "postcss";
 import CustomImage from "../base/CustomImage";
 import MyImage from "../base/MyImage";
@@ -18,377 +18,429 @@ export default function Welcome({ handleStepId }) {
   const dispatch = useDispatch();
   const [landingStep, setLandingStep] = useState(1);
 
-  const [expLevel, setExpLevel] = useState(0);
+  const [expLevel, setExpLevel] = useState(-1);
   const [isFirst, setIsFirst] = useState(0);
-  // const [userName, setUserName] = useState('');
-  const setUserName = (name) => {
-    dispatch(updateUserName(name));
-  };
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+    dispatch(updateUserName(userName));
+  }, [userName]);
+
+  const nameInput = useRef(null);
+  const factInput = useRef(null);
+
+  useEffect(() => {
+    // current property is refered to input element
+    if (landingStep == 3) {
+      nameInput.current.focus();
+    } else if (landingStep == 8) {
+      factInput.current.focus();
+    }
+  }, [landingStep]);
+
   return (
     <>
       {landingStep == 1 && (
         <div
-          className={`text-center max-w-[1280px] max-h-[790px] w-full bg-cover bg-no-repeat h-full fixed top-1/2 left-1/2 -translate-x-1/2 
-                            -translate-y-1/2 bg-[url('/images/landing_bg1.svg')] `}
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                            -translate-y-1/2 bg-[url('/images/GreenMeadows_Bg.svg')] justify-center flex`}
         >
-          <div className=" justify-center mt-[37.5%]">
+          <div className=" fixed right-20 bottom-14 ">
             <Button
-              className=""
               onClick={() => {
                 // dispatch(updatePlayStatus("story"));
                 setLandingStep(2);
               }}
             >
-              <img src="/images/landing_startbtn.png" />
+              <img src="/images/StartGame_Button.svg" className="w-96" />
             </Button>
-
-            {/* <Button
-            variant="outlined"
-            onClick={() => {
-              dispatch(updatePlayStatus("tutorial"));
-            }}
-          >
-            Tutorial
-          </Button> */}
           </div>
         </div>
       )}
       {landingStep == 2 && (
         <div
-          className={`text-center max-w-[1280px] max-h-[790px] w-full bg-cover bg-no-repeat h-full fixed top-1/2 left-1/2 -translate-x-1/2 
-                            -translate-y-1/2 bg-[url('/images/landing_bg2.svg')] `}
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                            -translate-y-1/2 bg-[url('/images/GreenMeadows_Bg2.svg')] justify-center flex`}
+          style={{ fontFamily: "Patrick Hand" }}
         >
-          <div className=" justify-center mt-[37.5%] bg-[url('/images/landing_dialogue.svg')] w-full h-52 translate-x-4">
-            <div className="text-5xl w-4/6 break-words  pt-12 ml-48 ">
+          <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4">
+            <div className="text-[41px] w-8/12 break-words  pt-16 ml-48 ">
               <Typed
-                strings={["Hi there! Welcome to Green Meadows, young lamb..."]}
-                typeSpeed={75}
+                strings={["Welcome to Green Meadows, young lamb. "]}
+                typeSpeed={35}
                 className="cursor-none"
               />
-              <MyImage
-                src="/images/ArrowBlack.svg"
-                className="cursor-pointer absolute right-[5.5%] top-[54%]  w-[80px] h-[79px]"
-                onClick={() => {
-                  setLandingStep(3);
-                }}
-              />
             </div>
+            <MyImage
+              src="/images/ArrowBlack.svg"
+              className="cursor-pointer absolute bottom-4 right-10   next-btn"
+              onClick={() => {
+                setLandingStep(3);
+              }}
+            />
           </div>
         </div>
       )}
       {landingStep == 3 && (
         <div
-          className={`text-center max-w-[1280px] max-h-[790px] w-full bg-cover bg-no-repeat h-full fixed top-1/2 left-1/2 -translate-x-1/2 
-                            -translate-y-1/2 bg-[url('/images/landing_bg2.svg')] justify-center`}
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                            -translate-y-1/2 bg-[url('/images/GreenMeadows_Bg2.svg')] justify-center flex`}
+          style={{ fontFamily: "Patrick Hand" }}
         >
-          <input
-            type="text"
-            className="relative text-4xl p-4 top-1/3 border-b-2 border-black"
-            placeholder="_________________________________"
-            onChange={(event) => setUserName(event.target.value)}
-          ></input>
           <MyImage
-            src="/images/ArrowYellow.svg"
-            className="cursor-pointer absolute right-[25.5%] top-[34%]  w-[80px] h-[79px]"
-            onClick={() => {
-              setLandingStep(4);
-            }}
-          />
-          <MyImage
-            src="/images/AlertPanel.svg"
-            className="absolute top-2/3 left-1/4   w-[769px] h-48 break-words p-16 text-5xl"
+            src="/images/NameInput.svg"
+            className="relative p-3 top-[285px] w-[520px] h-[95px]"
           >
-            <Typed strings={["Oh, wait, what do I call you?"]} typeSpeed={75} />
+            <input
+              type="text"
+              className="text-4xl top-[260px] outline-none bg-[#f0f1e5] text-center mt-3"
+              onChange={(event) => setUserName(event.target.value)}
+              ref={nameInput}
+            ></input>
+            <MyImage
+              src="/images/ArrowBlack.svg"
+              className="cursor-pointer absolute  -right-[5%] top-[15%]  next-btn"
+              onClick={() => {
+                setLandingStep(4);
+              }}
+            />
           </MyImage>
+
+          <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4">
+            <div className="text-[41px] w-8/12 break-words  pt-16 ml-48 ">
+              <Typed
+                strings={["Your name is..."]}
+                typeSpeed={35}
+                className="cursor-none"
+              />
+            </div>
+          </div>
         </div>
       )}
       {landingStep == 4 && (
         <div
-          className={`text-center max-w-[1280px] max-h-[790px] w-full bg-cover bg-no-repeat h-full fixed top-1/2 left-1/2 -translate-x-1/2 
-                            -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center`}
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                            -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center flex`}
+          style={{ fontFamily: "Patrick Hand" }}
         >
           <MyImage
-            src="/images/AlertPanel.svg"
-            className="absolute top-2/3 left-[15%]   w-[913px]  h-[186px] break-words p-8 px-16 text-3xl text-center"
-          >
-            <Typed
-              strings={[`I hear you’re looking for a job…`]}
-              typeSpeed={75}
-            />
-            <br />
-            <Typed
-              strings={[
-                `But we don’t just hire anyone at the Green Meadows Post... Let’s test your lamb chops and see if you’re cut out for this job...`,
-              ]}
-              typeSpeed={75}
-              startDelay={4000}
-            />
+            src="/images/GreenMeadows_Bg.svg"
+            className="absolute w-[259px] h-[161px] left-[460px] top-[182px] "
+          />
+          <MyImage
+            src="/images/Boss2_C.svg"
+            className="absolute w-[485px] h-[633px] top-[81px] left-[590px] "
+          />
+
+          <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4">
+            <div className="text-[41px] w-8/12 break-words  pt-12 ml-48 ">
+              <Typed
+                strings={[
+                  `Great, ${userName}. Welcome to the best (and, well, only) newsroom in Green Meadows!`,
+                ]}
+                typeSpeed={35}
+              />
+              {/* <br /> */}
+              {/* <Typed
+                strings={[
+                  `But we don’t just hire anyone at the Green Meadows Post... Let’s test your lamb chops and see if you’re cut out for this job...`,
+                ]}
+                typeSpeed={75}
+                startDelay={4000}
+              /> */}
+            </div>
             <MyImage
-              src="/images/ArrowYellow.svg"
-              className="cursor-pointer absolute right-[-5.5%] top-[60%]  w-[80px] h-[79px] "
+              src="/images/ArrowBlack.svg"
+              className="cursor-pointer absolute bottom-4 next-btn right-10"
               onClick={() => {
                 setLandingStep(5);
               }}
             />
-          </MyImage>
+          </div>
         </div>
       )}
 
       {landingStep == 5 && (
         <div
-          className={`text-center max-w-[1280px] max-h-[790px] w-full bg-cover bg-no-repeat h-full fixed top-1/2 left-1/2 -translate-x-1/2 
-                       -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center`}
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                           -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center flex`}
+          style={{ fontFamily: "Patrick Hand" }}
         >
           <MyImage
-            src="/images/MissingPoster.svg"
-            className="absolute  left-[5%]   w-[480px]  h-[400px] break-words p-16 px-16 text-3xl text-center border-2 border-black"
-          ></MyImage>
-
+            src="/images/GreenMeadows_Bg.svg"
+            className="absolute w-[259px] h-[161px] left-[460px] top-[182px] "
+          />
           <MyImage
-            src="/images/AlertPanel.svg"
-            className="absolute top-2/3 left-[15%]   w-[913px]  h-[186px] break-words p-16 px-16 text-3xl text-center"
-          >
-            <Typed
-              strings={[
-                `There’s a lot going on in our town, but some stories just want to pull the wool over your eyes… `,
-              ]}
-              typeSpeed={75}
-            />
+            src="/images/Boss2_C.svg"
+            className="absolute w-[485px] h-[633px] top-[81px] left-[590px] "
+          />
+
+          <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4">
+            <div className="text-[41px] w-8/12 break-words  pt-12 ml-48 ">
+              <Typed
+                strings={[
+                  `Your job is to look closely at local news stories and determine if they’re true. Based on your investigation...`,
+                ]}
+                typeSpeed={35}
+              />
+            </div>
             <MyImage
-              src="/images/ArrowYellow.svg"
-              className="cursor-pointer absolute right-[-5.5%] top-[60%]  w-[80px] h-[79px]"
+              src="/images/ArrowBlack.svg"
+              className="cursor-pointer absolute bottom-4 next-btn right-10"
               onClick={() => {
                 setLandingStep(6);
               }}
             />
-          </MyImage>
+          </div>
         </div>
       )}
 
       {landingStep == 6 && (
         <div
-          className={`text-center max-w-[1280px] max-h-[790px] w-full bg-cover bg-no-repeat h-full fixed top-1/2 left-1/2 -translate-x-1/2 
-                         -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center`}
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                         -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center flex`}
+          style={{ fontFamily: "Patrick Hand" }}
         >
           <MyImage
-            src="/images/AlertPanel.svg"
-            className="absolute top-2/3 left-[15%]   w-[913px]  h-[186px] break-words p-12 px-16 text-3xl text-center"
-          >
-            <Typed
-              strings={[
-                `Your job is to verify the news and make sure you publish the real ones. And remember, whatever you do,`,
-              ]}
-              typeSpeed={75}
-            />
-            <br />
-            <Typed
-              strings={[`don’t get LAMBOOZLED!`]}
-              typeSpeed={75}
-              startDelay={7000}
-              className="font-bold"
-            />
+            src="/images/BossFace1.svg"
+            className="absolute w-[900px] h-[650px] top-[70px] left-[380px] "
+          />
+          <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4">
+            <div className="text-[41px] w-8/12 break-words  pt-12 ml-48 ">
+              <Typed
+                strings={[
+                  `We’ll decide whether we should publish them or not. 
+                  Understand?`,
+                ]}
+                typeSpeed={35}
+              />
+            </div>
             <MyImage
-              src="/images/ArrowYellow.svg"
-              className="cursor-pointer absolute right-[-5.5%] top-[60%]  w-[80px] h-[79px]"
+              src="/images/ArrowBlack.svg"
+              className="cursor-pointer absolute bottom-4 next-btn right-10"
               onClick={() => {
                 setLandingStep(7);
               }}
             />
-          </MyImage>
+          </div>
         </div>
       )}
       {landingStep == 7 && (
         <div
-          className={`text-center max-w-[1280px] max-h-[790px] w-full bg-cover bg-no-repeat h-full fixed top-1/2 left-1/2 -translate-x-1/2 
-                        -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center`}
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                      -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center flex`}
+          style={{ fontFamily: "Patrick Hand" }}
         >
           <MyImage
-            src="/images/AlertPanel.svg"
-            className="absolute top-2/3 left-[15%]   w-[913px]  h-[186px] break-words p-6 px-16  text-center"
-          >
-            <Typed
-              strings={[`Ok, Editor, do you think you can do this job?`]}
-              typeSpeed={75}
-              className="text-3xl"
-            />
-            <div
-              className={`rounded-3xl w-[99%] bg-white h-[80%] border-2 border-black `}
-            >
-              <div className="text-[#49AAC9] font-bold pt-1">
-                Yike, not sure
-              </div>
-              <div className="flex font-bold text-lg leading-4 pt-1">
-                <div className="text-center ">
-                  I'm not sure I can do this on my own
-                </div>
-                <div>
-                  <MyImage
-                    src="/images/ExpBar.svg"
-                    className=" w-[450px]  h-[50px] break-words  text-center flex justify-between pt-6 cursor-pointer"
-                  >
+            src="/images/BossFace1.svg"
+            className="absolute w-[900px] h-[650px] top-[70px] left-[380px] "
+          />
+          <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4">
+            <div className="text-[30px] w-9/12 break-words  pt-10 ml-[165px] ">
+              <div
+                className={`rounded-[40px] w-[99%] bg-white h-[90%] border-2 border-black`}
+              >
+                <div className="pt-1">Yike, not sure</div>
+                <div className="flex   leading-4 pt-3 pb-6 justify-between space-x-4 ">
+                  <div className="text-center leading-10 -mt-6">
+                    I'm not sure I can do this on my own
+                  </div>
+                  <div>
                     <MyImage
-                      src={expLevel > 0 ? `/images/BlueHead.svg` : ``}
-                      className=" w-[60px]  h-[60px] text-center -mt-7 ml-4"
-                      // onMouseEnter={() => setExpLevel(1)}
-                      // onMouseLeave={() => setExpLevel(0)}
-                      onClick={() => setExpLevel(1)}
+                      src="/images/ExpBar.svg"
+                      className=" w-[300px] h-[3px] text-center flex mt-6 ml-5 "
                     ></MyImage>
-                    <MyImage
-                      src={expLevel > 1 ? `/images/BlueHead.svg` : ``}
-                      className=" w-[60px]  h-[60px] text-center -mt-7 "
-                      // onMouseEnter={() => setExpLevel(2)}
-                      // onMouseLeave={() => setExpLevel(0)}
-                      onClick={() => setExpLevel(2)}
-                    ></MyImage>
-                    <MyImage
-                      src={expLevel > 2 ? `/images/BlueHead.svg` : ``}
-                      className=" w-[60px]  h-[60px] text-center -mt-7 "
-                      // onMouseEnter={() => setExpLevel(3)}
-                      // onMouseLeave={() => setExpLevel(0)}
-                      onClick={() => setExpLevel(3)}
-                    ></MyImage>
-                    <MyImage
-                      src={expLevel > 3 ? `/images/BlueHead.svg` : ``}
-                      className=" w-[60px]  h-[60px] text-center -mt-7 "
-                      // onMouseEnter={() => setExpLevel(4)}
-                      // onMouseLeave={() => setExpLevel(0)}
-                      onClick={() => setExpLevel(4)}
-                    ></MyImage>
-                    <MyImage
-                      src={expLevel > 4 ? `/images/BlueHead.svg` : ``}
-                      className=" w-[60px]  h-[60px] text-center -mt-7 "
-                      // onMouseEnter={() => setExpLevel(5)}
-                      // onMouseLeave={() => setExpLevel(0)}
-                      onClick={() => setExpLevel(5)}
-                    ></MyImage>
-                  </MyImage>
-                </div>
-                <div className="text-center">
-                  I'll be the best editor you've ever seen!
+                    <div className="flex w-[350px] justify-between mt-1">
+                      <MyImage
+                        src={
+                          expLevel > 0
+                            ? `/images/BlackHead.svg`
+                            : `/images/WhiteHead.svg`
+                        }
+                        className=" w-[47px]  h-[47px] -mt-7 ml-4 cursor-pointer"
+                        onClick={() => setExpLevel(1)}
+                      ></MyImage>
+                      <MyImage
+                        src={
+                          expLevel > 1
+                            ? `/images/BlackHead.svg`
+                            : `/images/WhiteHead.svg`
+                        }
+                        className=" w-[47px]  h-[47px] -mt-7 cursor-pointer"
+                        onClick={() => setExpLevel(2)}
+                      ></MyImage>
+                      <MyImage
+                        src={
+                          expLevel > 2
+                            ? `/images/BlackHead.svg`
+                            : `/images/WhiteHead.svg`
+                        }
+                        className=" w-[47px]  h-[47px] -mt-7 cursor-pointer"
+                        onClick={() => setExpLevel(3)}
+                      ></MyImage>
+                      <MyImage
+                        src={
+                          expLevel > 3
+                            ? `/images/BlackHead.svg`
+                            : `/images/WhiteHead.svg`
+                        }
+                        className=" w-[47px]  h-[47px] -mt-7 cursor-pointer"
+                        onClick={() => setExpLevel(4)}
+                      ></MyImage>
+                      <MyImage
+                        src={
+                          expLevel > 4
+                            ? `/images/BlackHead.svg`
+                            : `/images/WhiteHead.svg`
+                        }
+                        className=" w-[47px]  h-[47px] -mt-7 cursor-pointer"
+                        onClick={() => setExpLevel(5)}
+                      ></MyImage>
+                    </div>
+                  </div>
+                  <div className="text-center leading-10 -mt-6">
+                    I'll be the best editor you've ever seen!
+                  </div>
                 </div>
               </div>
             </div>
-
             <MyImage
-              src="/images/ArrowYellow.svg"
-              className="cursor-pointer absolute right-[-5.5%] top-[60%]  w-[80px] h-[79px] "
+              src="/images/ArrowBlack.svg"
+              className="cursor-pointer absolute bottom-4 next-btn right-10"
               onClick={() => {
                 setLandingStep(8);
               }}
             />
-          </MyImage>
+          </div>
         </div>
       )}
       {landingStep == 8 && (
         <div
-          className={`text-center max-w-[1280px] max-h-[790px] w-full bg-cover bg-no-repeat h-full fixed top-1/2 left-1/2 -translate-x-1/2 
-                        -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center`}
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                     -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center flex`}
+          style={{ fontFamily: "Patrick Hand" }}
         >
           <MyImage
-            src="/images/AlertPanel.svg"
-            className="absolute top-2/3 left-[15%]   w-[913px]  h-[186px] break-words p-6 px-16  text-center"
-          >
-            <Typed
-              strings={[`Have you worked for us before?`]}
-              typeSpeed={75}
-              className="text-3xl"
-            />
-            <div
-              className={`rounded-3xl w-[99%] bg-white h-[80%] border-2 border-black `}
-            >
-              <div className="font-bold text-lg leading-4 pt-1">
-                <div className="w-full justify-center flex pt-8 pl-4">
-                  <MyImage
-                    src={
-                      isFirst == 1
-                        ? `/images/BlueHead.svg`
-                        : `/images/BlackHead.svg`
-                    }
-                    className=" w-[70px]  h-[70px] text-center -mt-7 "
-                    // onMouseEnter={() => setExpLevel(1)}
-                    // onMouseLeave={() => setExpLevel(0)}
-                    onClick={() => setIsFirst(1)}
-                  ></MyImage>
+            src="/images/BossFace1.svg"
+            className="absolute w-[900px] h-[650px] top-[70px] left-[380px] "
+          />
 
-                  <MyImage
-                    src={
-                      isFirst == 2
-                        ? `/images/BlueHead.svg`
-                        : `/images/BlackHead.svg`
-                    }
-                    className=" w-[70px]  h-[70px] text-center -mt-7 ml-32"
-                    // onMouseEnter={() => setExpLevel(2)}
-                    // onMouseLeave={() => setExpLevel(0)}
-                    onClick={() => setIsFirst(2)}
-                  ></MyImage>
+          <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4">
+            <div className="text-[30px] w-9/12 break-words  pt-10 ml-[165px] ">
+              <div
+                className={`rounded-[40px] w-[99%] bg-white h-[90%] border-2 border-black pb-10`}
+              >
+                <div className="pt-1 w-full text-center">
+                  So how you’d fact check?
                 </div>
-                <div className="w-full justify-center flex pl-28">
-                  <span className="mr-10">Yes</span>
-                  <span className="ml-20">No (1st time player)</span>
+                <div className="w-full justify-center flex">
+                  <div
+                    src="/images/NameInput.svg"
+                    className="relative w-[90%] h-[55px] border-b-2 border-black"
+                  >
+                    <input
+                      type="text"
+                      className="text-4xl top-[260px] outline-none  text-center mt-3 w-full"
+                      // onChange={(event) => setUserName(event.target.value)}
+                      ref={factInput}
+                    ></input>
+                  </div>
                 </div>
               </div>
             </div>
-
             <MyImage
-              src="/images/ArrowYellow.svg"
-              className="cursor-pointer absolute right-[-5.5%] top-[60%]  w-[80px] h-[79px] "
+              src="/images/ArrowBlack.svg"
+              className="cursor-pointer absolute bottom-4 next-btn right-10"
               onClick={() => {
                 setLandingStep(9);
               }}
             />
-          </MyImage>
+          </div>
         </div>
       )}
       {landingStep == 9 && (
         <div
-          className={`text-center max-w-[1280px] max-h-[790px] w-full bg-cover bg-no-repeat h-full fixed top-1/2 left-1/2 -translate-x-1/2 
-                        -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center`}
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                   -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center flex`}
+          style={{ fontFamily: "Patrick Hand" }}
         >
           <MyImage
-            src="/images/AlertPanel.svg"
-            className="absolute top-2/3 left-[15%]   w-[913px]  h-[186px] break-words p-6 px-16  text-center"
-          >
-            <Typed
-              strings={[
-                `Since you’re the editor, tell me how you’d fact check`,
-              ]}
-              typeSpeed={75}
-              className="text-3xl"
-            />
-            <div
-              className={`rounded-3xl w-[99%] bg-white h-[80%] border-2 border-black `}
-            >
-              <div className="font-bold text-lg leading-4 pt-1">
-                <div className="w-full justify-center flex pt-8 pl-4">
-                  <input></input>
-                </div>
-                <div className="w-full justify-center flex pl-28">
-                  <MyImage
-                    src={
-                      isFirst == 1
-                        ? `/images/BlueHead.svg`
-                        : `/images/BlackHead.svg`
-                    }
-                    className=" w-[70px]  h-[70px] text-center -mt-7 "
-                    // onMouseEnter={() => setExpLevel(1)}
-                    // onMouseLeave={() => setExpLevel(0)}
-                    onClick={() => setIsFirst(1)}
-                  ></MyImage>
-                  <span className="mr-10">Type to let me know</span>
+            src="/images/Boss2_C.svg"
+            className="absolute w-[485px] h-[633px] top-[81px] left-[590px] "
+          />
+          <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4">
+            <div className="text-[30px] w-9/12 break-words  pt-10 ml-[165px] ">
+              <div
+                className={`rounded-[40px] w-[99%] bg-white h-[80%] border-2 border-black pt-1 pb-3`}
+              >
+                <Typed
+                  strings={[`I see. Let me show you how things work here...`]}
+                  typeSpeed={35}
+                />
+                <div className="leading-4 pt-10 flex pb-4 ml-8">
+                  <div className="flex pl-4 w-1/2">
+                    <MyImage
+                      src={
+                        isFirst == 1
+                          ? `/images/BlackHead.svg`
+                          : `/images/WhiteHead.svg`
+                      }
+                      className=" w-[47px]  h-[47px] text-center -mt-5 cursor-pointer"
+                      onClick={() => setIsFirst(1)}
+                    ></MyImage>
+                    <span className="ml-4">Ok.(1st time player)</span>
+                  </div>
+                  <div className="flex pl-4 w-1/2">
+                    <MyImage
+                      src={
+                        isFirst == 2
+                          ? `/images/BlackHead.svg`
+                          : `/images/WhiteHead.svg`
+                      }
+                      className=" w-[47px]  h-[47px] text-center -mt-5 cursor-pointer"
+                      onClick={() => setIsFirst(2)}
+                    ></MyImage>
+                    <span className="ml-4">I worked here before</span>
+                  </div>
                 </div>
               </div>
             </div>
-
             <MyImage
-              src="/images/ArrowYellow.svg"
-              className="cursor-pointer absolute right-[-5.5%] top-[60%]  w-[80px] h-[79px] "
+              src="/images/ArrowBlack.svg"
+              className="cursor-pointer absolute bottom-4 next-btn right-10"
               onClick={() => {
-                if (isFirst == 1 || isFirst == 0)
-                  dispatch(updatePlayStatus("story"));
-                else if (isFirst == 2) dispatch(updatePlayStatus("tutorial"));
+                if (isFirst == 1) dispatch(updatePlayStatus("tutorial"));
+                else if (isFirst == 2) setLandingStep(10);
               }}
             />
-          </MyImage>
+          </div>
+        </div>
+      )}
+      {landingStep == 10 && (
+        <div
+          className={`text-center max-w-[1280px] max-h-[720px] w-full bg-[length:100%_100%] h-full fixed top-1/2 left-1/2 -translate-x-1/2 
+                            -translate-y-1/2 bg-[url('/images/feedback.svg')] justify-center flex`}
+          style={{ fontFamily: "Patrick Hand" }}
+        >
+          <MyImage
+            src="/images/Boss2_C.svg"
+            className="absolute w-[485px] h-[633px] top-[81px] left-[590px] "
+          />
+          <div className="bg-[url('/images/landing_dialogue.svg')] bg-no-repeat  h-[226px] w-[1236px] absolute bottom-4">
+            <div className="text-[41px] w-8/12 break-words  pt-16 ml-48 ">
+              <Typed
+                strings={["Oops, you’re right. Just start working then."]}
+                typeSpeed={35}
+                className="cursor-none"
+              />
+            </div>
+            <MyImage
+              src="/images/ArrowBlack.svg"
+              className="cursor-pointer absolute bottom-4 next-btn right-10"
+              onClick={() => {
+                dispatch(updatePlayStatus("story"));
+              }}
+            />
+          </div>
         </div>
       )}
     </>
